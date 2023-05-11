@@ -1,0 +1,105 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Timetable.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="720" d:DesignHeight="1000"
+		Width="720" Height="1000"
+        x:Class="Timetable.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Timetable"
+		Background="#475562">
+	<Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+
+	<Panel Margin="7">
+		<Grid RowDefinitions="auto,auto,*">
+			<StackPanel Grid.Row="0" Orientation="Horizontal">
+				<StackPanel.Styles>
+					<StyleInclude Source="/Assets/Styles/HeaderStyles.axaml"/>
+				</StackPanel.Styles>
+				<Button Classes="tt-switcher" Name="Button_Departure" Command="{Binding SelectDeparture}" Margin="0 0 7 0" >
+					<Canvas>
+						<Image Classes="tt-switcher"/>
+						<TextBlock Margin="60 12 0 0">Вылет</TextBlock>
+					</Canvas>
+				</Button>
+				<Button Classes="tt-switcher" Name="Button_Arrival" Command="{Binding SelectArrival}">
+					<Canvas>
+						<Image Classes="tt-switcher" />
+						<TextBlock Margin="60 12 0 0">Прилёт</TextBlock>
+					</Canvas>
+				</Button>
+				<Canvas Margin="60 19 85 0">
+					<TextBlock Foreground="#8892a5" FontSize="11">Обновить</TextBlock>
+					<Image Source="/Assets/reload.png" Width="15" Height="16" Margin="-19 -1 0 0"/>
+				</Canvas>
+				<Grid ColumnDefinitions="*,*,*" Margin="0 11 14 0">
+					<Button Classes="tt-days-switcher" Foreground="#6F788B" Background="#475562" Width="70" Name="Button_Yesterday" Command="{Binding SelectYesterday}" Grid.Column="0">Вчера</Button>
+					<Button Classes="tt-days-switcher" Foreground="#6F788B" Background="#475562" Width="90" Name="Button_Today" Command="{Binding SelectToday}" Grid.Column="1">Сегодня</Button>
+					<Button Classes="tt-days-switcher" Foreground="#6F788B" Background="#475562" Width="80" Name="Button_Tomorrow" Command="{Binding SelectTomorrow}" Grid.Column="2">Завтра</Button>
+				</Grid>
+			</StackPanel>
+			<Border Grid.Row="1" Padding="14 30 0 4" BorderBrush="#5c6576" BorderThickness="0 1">
+				<!-- Не могу выставить border только снизу, как в оригинальном CSS с той самой страницы... -->
+				<Grid ColumnDefinitions="123*,157*,110*,82*,78*,136*">
+					<TextBlock Foreground="#8892a5" FontSize="11" Height="16" VerticalAlignment="Center">Рейс</TextBlock>
+					<TextBlock Foreground="#8892a5" FontSize="11" Height="16" VerticalAlignment="Center" Grid.Column="1" Text="{Binding ColumnText}"/>
+					<TextBlock Foreground="#8892a5" FontSize="11" Height="16" VerticalAlignment="Center" Grid.Column="2">По расписанию</TextBlock>
+					<TextBlock Foreground="#8892a5" FontSize="11" Height="16" VerticalAlignment="Center" Grid.Column="3">Расчётное</TextBlock>
+					<TextBlock Foreground="#8892a5" FontSize="11" Height="16" VerticalAlignment="Center" Grid.Column="4">Сектор</TextBlock>
+					<TextBlock Foreground="#8892a5" FontSize="11" Height="16" VerticalAlignment="Center" Grid.Column="5">Статус</TextBlock>
+				</Grid>
+			</Border>
+			<ListBox Grid.Row="2" Background="#0000" Items="{Binding Items}" PointerReleased="Released">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<Panel Width="123">
+									<Image HorizontalAlignment="Left" Width="16" Height="16" Source="{Binding Image}"/>
+									<TextBlock Margin="23 0 0 0" FontSize="15" Foreground="White" Text="{Binding Flight}"/>
+								</Panel>
+								<Panel Width="157">
+									<TextBlock FontSize="15" Foreground="White" Text="{Binding Destination}"/>
+								</Panel>
+								<Panel Width="80" Margin="0 0 30 0">
+									<TextBlock FontSize="15" Foreground="White" HorizontalAlignment="Right" Text="{Binding Time}"/>
+								</Panel>
+								<Panel Width="52" Margin="0 0 30 0">
+									<TextBlock FontSize="15" Foreground="White" HorizontalAlignment="Right" Text="{Binding TimeCount}"/>
+								</Panel>
+								<Panel Width="51" Margin="0 0 27 0">
+									<TextBlock FontSize="15" Foreground="White" HorizontalAlignment="Right" Text="{Binding Terminal}"/>
+								</Panel>
+								<TextBlock FontSize="15" Foreground="White" HorizontalAlignment="Right" Text="{Binding Status}"/>
+							</StackPanel>
+							<Border IsVisible="{Binding Visible}" Height="1" Background="#eb7501" Margin="-13 12 0 0"/>
+							<StackPanel IsVisible="{Binding Visible}" Orientation="Horizontal">
+								<Image Margin="0 16 0 0" Width="80" Height="80" Source="{Binding BigImage}"/>
+								<Panel Margin="44 11 0 0" Width="570">
+									<TextBlock FontSize="15" Foreground="White" Text="{Binding Path}"/>
+									<ItemsControl Margin="0 30 0 0" Items="{Binding Description}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Margin="0 0 10 0" Padding="8">
+													<TextBlock Foreground="#d5d9e3" FontSize="13" Text="{Binding}"/>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<WrapPanel/>
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
+									</ItemsControl>
+								</Panel>
+							</StackPanel>
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</Grid>
+	</Panel>
+</Window>
